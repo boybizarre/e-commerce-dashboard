@@ -6,3 +6,12 @@ export type ProductType = {
   __v?: number,
   images?: string[],
 }
+
+export type CategoryType = {
+  _id: string;
+  name: string;
+  parent?: {
+    name: string;
+    _id: string;
+  };
+};

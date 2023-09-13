@@ -1,13 +1,12 @@
 // import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { Product } from '@/models/Product';
 import { mongooseConnect } from '@/app/lib/mongoose';
 
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { title, description, price } = body;
+    const { title, description, price, images } = body;
 
     if (!title || !description || !price) {
       return new NextResponse('Missing Info', { status: 400 });
@@ -19,6 +18,7 @@ export async function POST(req: Request, res: Response) {
       title,
       description,
       price,
+      images,
     });
 
     return NextResponse.json(product);
@@ -56,8 +56,8 @@ export async function PUT(req: Request, res: Response) {
   try {
     const body = await req.json();
     console.log(body);
-    const { title, description, price, id } = body;
-    await Product.updateOne({ _id: id }, { title, description, price });
+    const { title, description, price, images, id } = body;
+    await Product.updateOne({ _id: id }, { title, description, price, images });
 
     return NextResponse.json(true);
   } catch (error: any) {
