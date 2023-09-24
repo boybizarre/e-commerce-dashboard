@@ -3,23 +3,30 @@ import { NextResponse } from 'next/server';
 import { Product } from '@/models/Product';
 import { mongooseConnect } from '@/app/lib/mongoose';
 
+import { isAdminRequest } from '@/app/actions/isAdmin';
+
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { title, description, price, images } = body;
+    const { title, description, price, images, category, properties } = body;
 
     if (!title || !description || !price) {
       return new NextResponse('Missing Info', { status: 400 });
     }
 
     await mongooseConnect();
+    await isAdminRequest();
 
     const product = await Product.create({
       title,
       description,
       price,
       images,
+      category,
+      properties,
     });
+
+    console.log(properties);
 
     return NextResponse.json(product);
   } catch (error: any) {
@@ -29,9 +36,11 @@ export async function POST(req: Request, res: Response) {
 }
 
 export async function GET(req: Request, res: Response) {
-  await mongooseConnect();
-
+  
   try {
+    await mongooseConnect();
+    await isAdminRequest();
+
     // getting the query parameter from the url
     const id = new URL(req.url).searchParams.get('id');
 
@@ -51,13 +60,22 @@ export async function GET(req: Request, res: Response) {
 }
 
 export async function PUT(req: Request, res: Response) {
-  await mongooseConnect();
-
+  
   try {
+    await mongooseConnect();
+    await isAdminRequest();
+
     const body = await req.json();
     console.log(body);
-    const { title, description, price, images, id } = body;
-    await Product.updateOne({ _id: id }, { title, description, price, images });
+    const { title, description, price, images, id, category, properties } =
+      body;
+
+    console.log(properties);
+    
+    await Product.updateOne(
+      { _id: id },
+      { title, description, price, images, category, properties }
+    );
 
     return NextResponse.json(true);
   } catch (error: any) {
@@ -67,9 +85,11 @@ export async function PUT(req: Request, res: Response) {
 }
 
 export async function DELETE(req: Request, res: Response) {
-  await mongooseConnect();
-
+  
   try {
+    await mongooseConnect();
+    await isAdminRequest();
+
     // getting the query parameter from the url
     const id = new URL(req.url).searchParams.get('id');
 
