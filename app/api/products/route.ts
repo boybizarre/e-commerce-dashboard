@@ -98,7 +98,7 @@ export async function DELETE(req: Request, res: Response) {
       return NextResponse.json(true);
     }
   } catch (error: any) {
-    console.log(error, 'UPDATE ERROR');
+    console.log(error, 'DELETE ERROR');
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

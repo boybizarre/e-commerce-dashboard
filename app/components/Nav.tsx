@@ -25,6 +25,7 @@ const Nav: React.FC<NavProps> = ({ show }) => {
     router.push('/');
     await signOut();
   };
+
   return (
     <aside
       className={

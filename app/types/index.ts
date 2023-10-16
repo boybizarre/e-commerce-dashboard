@@ -39,3 +39,15 @@ export type newPropertyType = {
   name: string;
   values: string[];
 };
+
+export type OrderType = {
+  line_items: any[];
+  name: string;
+  email: string;
+  city: string;
+  postalCode: string;
+  streetAddress: string;
+  country: string;
+  paid: boolean;
+  createdAt: string;
+};
